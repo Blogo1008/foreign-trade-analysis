@@ -1,0 +1,22 @@
+l = scan("importing.txt", "character", sep = "\n");
+l <- Corpus(VectorSource(l));
+l <- tm_map(l, removeNumbers);
+l <- tm_map(l, stripWhitespace);
+l <- tm_map(l, removePunctuation);
+l <- as.character(l);
+
+# 句子用标点符号分割。
+sentences = strsplit(l, "，|。|！|？|、");
+sentences = unlist(sentences);
+sentences = sentences[sentences != ""];
+s.len = nchar(sentences);
+
+# 暴力挨个拆分
+splitwords = function(x, x.len) substring(x, 1:(x.len+1 - 2), 2:x.len);
+
+words = mapply(splitwords, sentences, s.len, SIMPLIFY = TRUE, USE.NAMES = FALSE);
+words = unlist(words);
+words.freq = table(words);
+words.freq = sort(words.freq, decreasing = TRUE);
+df<-data.frame(Word = names(words.freq[1:100]), Freq = as.integer(words.freq[1:100]));
+write.table(df, "frequent 2word.txt");

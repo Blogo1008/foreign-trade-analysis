@@ -1,0 +1,4 @@
+library(arules)
+terms<- read.transactions("frequent terms.csv", sep = ",")
+wordrules <- apriori(terms, parameter = list(support =0.006, confidence = 0.10, minlen = 2))
+write(wordrules, file = "wordrules.csv",sep = ",", quote = TRUE, row.names = FALSE)
